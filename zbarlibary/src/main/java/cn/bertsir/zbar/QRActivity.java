@@ -20,7 +20,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
@@ -30,7 +29,6 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.soundcloud.android.crop.Crop;
 
@@ -40,6 +38,7 @@ import cn.bertsir.zbar.Qr.ScanResult;
 import cn.bertsir.zbar.Qr.Symbol;
 import cn.bertsir.zbar.utils.GetPathFromUri;
 import cn.bertsir.zbar.utils.QRUtils;
+import cn.bertsir.zbar.utils.ToastUtils;
 import cn.bertsir.zbar.view.ScanView;
 import cn.bertsir.zbar.view.VerticalSeekBar;
 
@@ -79,9 +78,8 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             Window window = getWindow();
             window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         }
-        Log.i("zBarLibary", "version: "+BuildConfig.VERSION_NAME);
         options = (QrConfig) getIntent().getExtras().get(QrConfig.EXTRA_THIS_CONFIG);
-        initParm();
+        initParam();
         setContentView(R.layout.activity_qr);
         initView();
     }
@@ -89,13 +87,10 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
     /**
      * 初始化参数
      */
-    private void initParm() {
+    private void initParam() {
         switch (options.getSCREEN_ORIENTATION()) {
             case QrConfig.SCREEN_LANDSCAPE:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-                break;
-            case QrConfig.SCREEN_PORTRAIT:
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
                 break;
             case QrConfig.SCREEN_SENSOR:
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
@@ -343,7 +338,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
             public void run() {
                 try {
                     if (TextUtils.isEmpty(imagePath)) {
-                        Toast.makeText(getApplicationContext(), "获取图片失败！", Toast.LENGTH_SHORT).show();
+                        ToastUtils.show(getApplicationContext(), "获取图片失败！");
                         return;
                     }
                     //优先使用zbar识别一次二维码
@@ -381,11 +376,11 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
                                             QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
                                             finish();
                                         } else {
-                                            Toast.makeText(getApplicationContext(), "识别失败！", Toast.LENGTH_SHORT).show();
+                                            ToastUtils.show(getApplicationContext(), "识别失败！");
                                             closeProgressDialog();
                                         }
                                     } catch (Exception e) {
-                                        Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                                        ToastUtils.show(getApplicationContext(), "识别异常！");
                                         closeProgressDialog();
                                         e.printStackTrace();
                                     }
@@ -398,7 +393,7 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
 
 
                 } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(), "识别异常！", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show(getApplicationContext(), "识别异常！");
                     closeProgressDialog();
                 }
             }
