@@ -376,12 +376,13 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
                                             QRUtils.getInstance().deleteTempFile(cropTempPath);//删除裁切的临时文件
                                             finish();
                                         } else {
-                                            ToastUtils.show(getApplicationContext(), "识别失败！");
                                             closeProgressDialog();
+                                            ToastUtils.show(getApplicationContext(), "识别失败！");
+
                                         }
                                     } catch (Exception e) {
-                                        ToastUtils.show(getApplicationContext(), "识别异常！");
                                         closeProgressDialog();
+                                        ToastUtils.show(getApplicationContext(), "识别异常！");
                                         e.printStackTrace();
                                     }
 
@@ -390,11 +391,9 @@ public class QRActivity extends Activity implements View.OnClickListener, Sensor
                             }
                         }
                     });
-
-
                 } catch (Exception e) {
-                    ToastUtils.show(getApplicationContext(), "识别异常！");
                     closeProgressDialog();
+                    ToastUtils.show(getApplicationContext(), "识别异常！");
                 }
             }
         }).start();
